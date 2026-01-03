@@ -1,0 +1,47 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 2,
+      "number_of_replicas": 1,
+      "refresh_interval": "30s",
+      "similarity": {
+        "my_bm25": {
+          "type": "BM25",
+          "k1": 1.2,
+          "b": 0.75
+        }
+      },
+      "knn": true,
+      "knn.algo_param.ef_search": 100
+    }
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "knowledge": {
+        "type": "keyword",
+        "index": false
+      },
+      "segment": {
+        "type": "text", 
+        "similarity": "my_bm25"
+      },
+      "vector": {
+        "type": "knn_vector",
+        "dimension": 1024,
+        "method": {
+          "name": "hnsw",
+          "space_type": "cosinesimil",
+          "engine": "nmslib",
+          "parameters": {
+            "ef_construction": 128,
+            "m": 16
+          }
+        }
+      }
+    }
+  }
+}
